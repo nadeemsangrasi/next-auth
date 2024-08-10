@@ -18,12 +18,14 @@ export const usersTable = pgTable("users", {
   password: varchar("password", {
     length: 100,
   }).notNull(),
-  isVerified: boolean("isVerified").default(false),
-  isAdmin: boolean("isAdmin").default(false),
-  forgotPasswordToken: varchar("forgotPasswordToken", { length: 255 }),
-  forgotPasswordTokenExpiry: varchar("forgotPasswordToken", { length: 255 }),
-  verifyToken: varchar("forgotPasswordToken", { length: 255 }),
-  verifyTokenExpiry: varchar("forgotPasswordToken", { length: 255 }),
+  isVerified: boolean("isverified").default(false),
+  isAdmin: boolean("isadmin").default(false),
+  forgotPasswordToken: varchar("forgotpasswordtoken", { length: 255 }),
+  forgotPasswordTokenExpiry: varchar("forgotpasswordtokenexpiry", {
+    length: 255,
+  }),
+  verifyToken: varchar("verifytoken", { length: 255 }),
+  verifyTokenExpiry: varchar("verifytokenexpiry", { length: 255 }),
 });
 
 export const db = drizzle(sql);
