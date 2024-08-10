@@ -1,7 +1,7 @@
 "use client";
-import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, use, useState } from "react";
+import React, { FormEvent, useState } from "react";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -9,6 +9,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
+  const { login } = useAuth();
+
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(false);
@@ -26,6 +28,7 @@ const SignIn = () => {
       if (res.status !== 200) {
         setError(true);
       }
+      login();
     } catch (error: any) {
       console.log(error.message);
       setLoading(false);
@@ -44,8 +47,16 @@ const SignIn = () => {
         className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
+
         <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             placeholder="Enter your email"
             name="email"
@@ -54,8 +65,16 @@ const SignIn = () => {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
         <div className="mb-4">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             placeholder="Enter your password"
             name="password"
@@ -64,6 +83,7 @@ const SignIn = () => {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -73,6 +93,7 @@ const SignIn = () => {
         >
           {loading ? "Signing in..." : "Sign In"}
         </button>
+
         {error && (
           <p className="mt-4 text-red-500 text-center">
             Something went wrong. Please try again.

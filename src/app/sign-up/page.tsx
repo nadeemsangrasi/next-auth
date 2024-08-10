@@ -44,7 +44,14 @@ const SignUp = () => {
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
         <div className="mb-4">
+          <label
+            htmlFor="username"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Username
+          </label>
           <input
+            id="username"
             type="text"
             placeholder="Enter your username"
             name="username"
@@ -54,7 +61,14 @@ const SignUp = () => {
           />
         </div>
         <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             placeholder="Enter your email"
             name="email"
@@ -64,7 +78,14 @@ const SignUp = () => {
           />
         </div>
         <div className="mb-4">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             placeholder="Enter your password"
             name="password"
