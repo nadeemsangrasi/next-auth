@@ -24,6 +24,7 @@ const Navbar = () => {
       if (response.ok) {
         logout();
         setLogOutLoading(false);
+        router.refresh();
         router.push("/sign-in");
         toast.success("User logged out successfully");
       } else {

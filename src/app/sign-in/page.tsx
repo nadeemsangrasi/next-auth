@@ -38,6 +38,7 @@ const SignIn = () => {
     }
 
     if (!error) {
+      router.refresh();
       router.push("/");
     }
   };

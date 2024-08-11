@@ -47,6 +47,7 @@ const ProfileById = ({ params }: { params: { id: string } }) => {
       if (response.ok) {
         logout();
         setLogOutLoading(false);
+        router.refresh();
         router.push("/sign-in"); // Redirect to login page after logout
         toast.success("User logged out successfully");
       } else {

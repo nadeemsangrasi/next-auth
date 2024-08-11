@@ -4,16 +4,6 @@ import { db, usersTable } from "@/lib/drizzle";
 import { eq } from "drizzle-orm";
 import { sendEmail } from "@/helper/mailer";
 
-// export const GET = async (req: NextRequest) => {
-//   try {
-//     const res = await db.select().from(usersTable);
-//     console.log(res);
-//     return NextResponse.json(res);
-//   } catch (error:any) {
-//     console.log(error.message);
-//     return NextResponse.json({ error: error.message, statusbar: error.status });
-//   }
-// };
 export const POST = async (req: NextRequest) => {
   try {
     const reqBody = await req.json();

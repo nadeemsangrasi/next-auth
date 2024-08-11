@@ -56,7 +56,6 @@ export const POST = async (req: NextRequest) => {
     });
 
     cookies().set("token", token);
-    console.log(cookies().get("token"));
 
     return NextResponse.json({ nextREs }, { status: 200 });
   } catch (error: any) {

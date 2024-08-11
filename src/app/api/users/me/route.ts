@@ -2,9 +2,9 @@ import { db, usersTable } from "@/lib/drizzle";
 import { eq } from "drizzle-orm";
 import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     const token = cookies().get("token")?.value;
     if (!token) {
