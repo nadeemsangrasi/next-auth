@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const isPublicPath =
     path === "/sign-in" || path === "/sign-up" || path === "/verifyemail";
 
-  if (isPublicPath && token) {
+  if (isPublicPath && token?.length !== 0) {
     // If the user is already logged in, redirect to the home page
     return NextResponse.redirect(new URL("/", request.url));
   }

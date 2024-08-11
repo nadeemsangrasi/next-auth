@@ -41,7 +41,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         : "Reset Your Password";
     const action =
       emailType === "VERIFY" ? "verify your email" : "reset your password";
-    const url = `${process.env.DOMAIN}/verifyemail?token=${hashedToken}`;
+    const url = `https://next-auth-eight-omega.vercel.app/verifyemail?token=${hashedToken}`;
     const htmlContent = `
       <p>Hello,</p>
       <p>Thank you for registering with us. Please click the link below to ${action}:</p>
