@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest) => {
       id: res[0].id,
     };
 
-    const token = jwt.sign(payload, process.env.TOKEN_SECRET!, {
+    const token = jwt.sign(payload, "nadeemkhan", {
       expiresIn: "1h",
     });
 
