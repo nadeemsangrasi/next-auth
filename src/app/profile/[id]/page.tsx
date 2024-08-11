@@ -4,6 +4,7 @@ import { getUserDataById } from "@/app/action";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const ProfileById = ({ params }: { params: { id: string } }) => {
   const [user, setUser] = useState<any>(null);
@@ -47,6 +48,7 @@ const ProfileById = ({ params }: { params: { id: string } }) => {
         logout();
         setLogOutLoading(false);
         router.push("/sign-in"); // Redirect to login page after logout
+        toast.success("User logged out successfully");
       } else {
         throw new Error("Failed to log out");
       }
@@ -63,7 +65,7 @@ const ProfileById = ({ params }: { params: { id: string } }) => {
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg transform transition-all duration-500">
           {/* Dashboard Heading */}
           <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
-            User Dashboard
+            User Profile
           </h1>
 
           {loading ? (

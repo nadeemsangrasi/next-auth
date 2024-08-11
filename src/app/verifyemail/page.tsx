@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const VerifyEmail = ({ searchParams }: { searchParams: { token: string } }) => {
   const { token } = searchParams;
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const router = useRouter();
@@ -23,6 +23,7 @@ const VerifyEmail = ({ searchParams }: { searchParams: { token: string } }) => {
       console.log(error.message);
     }
     if (!error) {
+      toast.success("Your account verified successfully");
       router.push("/sign-in");
     }
   };

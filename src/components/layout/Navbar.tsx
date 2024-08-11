@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
@@ -24,6 +25,7 @@ const Navbar = () => {
         logout();
         setLogOutLoading(false);
         router.push("/sign-in");
+        toast.success("User logged out successfully");
       } else {
         throw new Error("Failed to log out");
       }
@@ -44,11 +46,11 @@ const Navbar = () => {
           <Link href="/" className="hover:underline">
             Home
           </Link>
-          <Link href="/profile" className="hover:underline">
-            Profile
-          </Link>
           {isAuthenticated ? (
             <>
+              <Link href="/profile" className="hover:underline">
+                Profile
+              </Link>
               {isClient && (
                 <button
                   onClick={handleLogout}

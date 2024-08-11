@@ -2,22 +2,27 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = cookies().get("token"); // Replace with your authentication logic
+  const token = cookies().get("token")?.value || ""; // Replace with your authentication logic
+  const path = request.nextUrl.pathname;
 
-  // Check if the request is for a page that should not be redirected
-  if (
-    !token &&
-    !request.nextUrl.pathname.startsWith("/sign-in") &&
-    !request.nextUrl.pathname.startsWith("/sign-up")
-  ) {
-    // Redirect to login if the token is not present
+  const isPublicPath =
+    path === "/sign-in" || path === "/sign-up" || path === "/verifyemail";
+
+  if (isPublicPath && token) {
+    // If the user is already logged in, redirect to the home page
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (!isPublicPath && !token) {
+    // If the user is not logged in and trying to access a protected route, redirect to the sign-in page
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
+  // Allow access to the requested route
   return NextResponse.next();
 }
 
 // Define which paths the middleware should apply to
 export const config = {
-  matcher: ["/profile", "/verifyemail"], // Apply middleware to these paths
+  matcher: ["/", "/sign-in", "/sign-up", "/profile", "/verifyemail"], // Apply middleware to these paths
 };

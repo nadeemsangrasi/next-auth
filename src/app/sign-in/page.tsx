@@ -2,6 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -29,6 +30,7 @@ const SignIn = () => {
         setError(true);
       }
       login();
+      toast.success(" user sign in successfull!");
     } catch (error: any) {
       console.log(error.message);
       setLoading(false);
@@ -36,7 +38,7 @@ const SignIn = () => {
     }
 
     if (!error) {
-      router.push("/profile");
+      router.push("/");
     }
   };
 
