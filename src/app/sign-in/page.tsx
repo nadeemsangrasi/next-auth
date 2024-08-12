@@ -45,7 +45,6 @@ const SignIn = () => {
       if (res.status === 200) {
         login();
         toast.success("User sign-in successful!");
-        router.push("/");
       } else if (res.status === 401) {
         setError("Incorrect email or password. Please try again.");
       } else if (res.status === 403) {

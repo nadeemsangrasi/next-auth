@@ -2,13 +2,13 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = cookies().get("token")?.value || "";
+  const token = cookies().get("token")?.value;
   const path = request.nextUrl.pathname;
 
   const isPublicPath =
     path === "/sign-in" || path === "/sign-up" || path === "/verifyemail";
 
-  if (isPublicPath && token?.length !== 0) {
+  if (isPublicPath && token) {
     // If the user is already logged in, redirect to the home page
     return NextResponse.redirect(new URL("/", request.url));
   }

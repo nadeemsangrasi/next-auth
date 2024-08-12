@@ -47,7 +47,9 @@ const SignUp = () => {
         }),
       });
 
-      if (res.status !== 200) {
+      if (res.status === 400) {
+        setError("User already exists with this email.");
+      } else if (res.status !== 200) {
         setError("Something went wrong. Please try again.");
       } else {
         setSuccess(true);

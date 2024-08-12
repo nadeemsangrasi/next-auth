@@ -8,42 +8,48 @@ export const POST = async (req: NextRequest) => {
   try {
     const reqBody = await req.json();
     if (!reqBody) {
-      throw new Error("Request body is required");
-    }
-
-    const { username, email, password } = reqBody;
-
-    // Validations
-    const hasUser = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
-
-    if (hasUser.length > 0) {
       return NextResponse.json(
-        { error: "user already exists" },
+        { error: "Request body is required" },
         { status: 400 }
       );
     }
 
-    const salts = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salts);
+    const { username, email, password } = reqBody;
 
-    // Add data to db
-    const res = await db
+    // Check if user already exists
+    const existingUser = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, email));
+
+    if (existingUser.length > 0) {
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert new user into the database
+    const result = await db
       .insert(usersTable)
       .values({ username, email, password: hashedPassword })
       .returning();
 
-    await sendEmail({ email, emailType: "VERIFY", userId: res[0].id });
-    console.log(res);
+    // Send verification email
+    await sendEmail({ email, emailType: "VERIFY", userId: result[0].id });
 
-    return NextResponse.json({ res, message: "success" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Success", user: result[0] },
+      { status: 200 }
+    );
   } catch (error: any) {
-    return NextResponse.json({
-      message: "Something went wrong",
-      error: error.message,
-      status: error.status,
-    });
+    return NextResponse.json(
+      { error: "Something went wrong", details: error.message },
+      { status: 500 }
+    );
   }
 };
