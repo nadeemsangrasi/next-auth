@@ -27,11 +27,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     }
 
     const transport = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
+      service: "gmail",
+      secure: true,
+      port: 465,
       auth: {
-        user: "c08da69ae2e65c",
-        pass: "ae7d76a5188bcd",
+        user: process.env.USER,
+        pass: process.env.PASSWORD,
       },
     });
 
@@ -41,7 +42,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         : "Reset Your Password";
     const action =
       emailType === "VERIFY" ? "verify your email" : "reset your password";
-    const url = `https://next-auth-eight-omega.vercel.app/verifyemail?token=${hashedToken}`;
+    const url = `${process.env.DOMAIN}/verifyemail?token=${hashedToken}`;
     const htmlContent = `
       <p>Hello,</p>
       <p>Thank you for registering with us. Please click the link below to ${action}:</p>
@@ -49,11 +50,14 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       <p>If the link above does not work, please copy and paste the following URL into your web browser:</p>
       <p>${url}</p>
       <p>This link will expire in 1 hour.</p>
-      <p>Best regards,<br>Your Company Name</p>
+      <p>Best regards,<br>Nadeem Auth App</p>
     `;
 
     const mailOptions = await transport.sendMail({
-      from: "nadeemsangrasi903@gmail.com",
+      from: {
+        name: "Nadeem_Auth_App",
+        address: process.env.USER!,
+      },
       to: email,
       subject,
       html: htmlContent,

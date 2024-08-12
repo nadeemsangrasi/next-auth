@@ -9,12 +9,33 @@ const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
+    setError(null);
+
+    if (!username || !email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/users/sign-up", {
@@ -25,17 +46,18 @@ const SignUp = () => {
           password: password,
         }),
       });
+
       if (res.status !== 200) {
-        setError(true);
+        setError("Something went wrong. Please try again.");
       } else {
         setSuccess(true);
+        toast.success("Check your email to verify account");
       }
-      setLoading(false);
-      toast.success("Check your email to verify account");
     } catch (error: any) {
       console.log(error.message);
+      setError("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
-      setError(true);
     }
   };
 
@@ -113,11 +135,7 @@ const SignUp = () => {
           >
             {loading ? "Creating account..." : "Create account"}
           </button>
-          {error && (
-            <p className="mt-4 text-red-500 text-center">
-              Something went wrong. Please try again.
-            </p>
-          )}
+          {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
         </form>
       )}
     </div>

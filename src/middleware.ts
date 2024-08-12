@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = cookies().get("token")?.value || ""; // Replace with your authentication logic
+  const token = cookies().get("token")?.value || "";
   const path = request.nextUrl.pathname;
 
   const isPublicPath =

@@ -8,13 +8,29 @@ const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { login } = useAuth();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
+    setError(null);
+
+    if (!email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/users/sign-in", {
@@ -25,21 +41,24 @@ const SignIn = () => {
         }),
       });
       setLoading(false);
-      console.log(res);
-      if (res.status !== 200) {
-        setError(true);
+
+      if (res.status === 200) {
+        login();
+        toast.success("User sign-in successful!");
+        router.push("/");
+      } else if (res.status === 401) {
+        setError("Incorrect email or password. Please try again.");
+      } else if (res.status === 403) {
+        setError(
+          "Your account is not verified. Please check your email to verify your account."
+        );
+      } else {
+        setError("Something went wrong. Please try again.");
       }
-      login();
-      toast.success(" user sign in successfull!");
     } catch (error: any) {
       console.log(error.message);
       setLoading(false);
-      setError(true);
-    }
-
-    if (!error) {
-      router.refresh();
-      router.push("/");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -97,11 +116,7 @@ const SignIn = () => {
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
-        {error && (
-          <p className="mt-4 text-red-500 text-center">
-            Something went wrong. Please try again.
-          </p>
-        )}
+        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
       </form>
     </div>
   );
